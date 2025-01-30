@@ -1,50 +1,74 @@
-# React + TypeScript + Vite
+# Gravity Simulator in React
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An interactive gravity simulation built with React, TypeScript, and Canvas. Simulate planetary orbits and celestial mechanics in real-time.
 
-Currently, two official plugins are available:
+![Gravity Simulator Preview](orbit.svg)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## ✨ Features
 
-## Expanding the ESLint configuration
+- **Interactive Solar System Simulation**
+  - Real-time physics calculations using Newton's law of universal gravitation
+  - Initial setup includes Sun, Mercury, Venus, Earth (with Moon), Mars, Jupiter, and Saturn
+  - Accurate mass ratios and orbital velocities
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- **Rich Interactive Controls**
+  - Play/Pause simulation
+  - Pan and zoom controls
+  - Trajectory predictions
+  - Body selection and tracking
+  - Add/remove celestial bodies
+  - Generate asteroid belts
 
-- Configure the top-level `parserOptions` property like this:
+- **Beautiful UI Components**
+  - Built with shadcn/ui components
+  - Clean and modern interface
+  - Real-time FPS counter
+  - Detailed body parameters editor
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## 🚀 Getting Started
+
+1. Install dependencies:
+```bash
+npm install
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+2. Start the development server:
+```bash
+npm run dev
 ```
+
+3. Build for production:
+```bash
+npm run build
+```
+
+## 🛠️ Tech Stack
+
+- [`React`](package.json) - UI framework
+- [`TypeScript`](tsconfig.json) - Type safety
+- [`Vite`](vite.config.ts) - Build tool
+- [`TailwindCSS`](tailwind.config.js) - Styling
+- `shadcn/ui` - UI components
+- [`Canvas API`](src/sim.tsx) - Rendering
+
+## 🎮 Controls
+
+- **Pan**: Click and drag
+- **Zoom**: Mouse wheel
+- **Select Body**: Click on any celestial body
+- **Add Body**: Click the '+' button
+- **Generate Asteroid Belt**: Click 'Belt' button
+- **Toggle Predictions**: Click the telescope button
+- **Play/Pause**: Click the play/pause button
+
+## 🌟 Key Components
+
+- [`Sim`](src/sim.tsx) - Main simulation component
+
+## 📝 License
+
+This project is MIT licensed. Feel free to use and modify the code as you see fit.
+
+---
+
+Built with ❤️ using React and TypeScript. The simulation uses simplified physics models but maintains realistic mass ratios and orbital mechanics.
