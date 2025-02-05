@@ -38,7 +38,6 @@ function Sim() {
   const [panOffset, setPanOffset] = useState({ x: 0, y: 0 });
   const [isPanning, setIsPanning] = useState(false);
   const lastMousePosition = useRef({ x: 0, y: 0 });
-  const [simulationBodies, setSimulationBodies] = useState<Body[]>([]);
   const simulationBodiesRef = useRef<Body[]>([]);
   const [zoom, setZoom] = useState(0.20);
   const [showPredictions, setShowPredictions] = useState(true);
@@ -193,16 +192,6 @@ function Sim() {
     //   color: "blue",
     // },
   ]);
-
-  useEffect(() => {
-    const initialSimBodies: Body[] = bodies.map(body => ({
-      position: { x: body.positionX, y: body.positionY },
-      velocity: { x: body.velocityX, y: body.velocityY },
-      mass: body.mass,
-      size: body.size,
-    }));
-    setSimulationBodies(initialSimBodies);
-  }, [bodies]);
 
   useEffect(() => {
     simulationBodiesRef.current = bodies.map(body => ({
