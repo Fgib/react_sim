@@ -19,6 +19,7 @@ interface Body {
   position: Vec2;
   velocity: Vec2;
   mass: number;
+  size: number;
 }
 
 // Update Prediction type
@@ -83,7 +84,7 @@ function Sim() {
     const clickY = (e.clientY - rect.top - canvas.height / 2 - panOffset.y) / zoom;
 
     // Check if click is on any body
-    const bodyPositions = isPlaying ? simulationBodiesRef.current : bodies.map(b => ({ position: { x: b.positionX, y: b.positionY } }));
+    const bodyPositions = isPlaying ? simulationBodiesRef.current : bodies.map(b => ({ position: { x: b.positionX, y: b.positionY }, size: b.size }));
 
     for (let i = 0; i < bodyPositions.length; i++) {
       const body = bodyPositions[i];
@@ -91,7 +92,7 @@ function Sim() {
       const dy = body.position.y - clickY;
       const distance = Math.sqrt(dx * dx + dy * dy);
 
-      if (distance < 10 / zoom) {
+      if (distance < body.size / zoom) {
         setSelectedBodyIndex(prevIndex => prevIndex === i ? null : i);
         return;
       }
@@ -110,6 +111,7 @@ function Sim() {
       positionX: 0,
       positionY: 0,
       color: "yellow",
+      size: 20
     },
     { // Mercury
       mass: 3.285e17,
@@ -118,6 +120,7 @@ function Sim() {
       positionX: 390,
       positionY: 0,
       color: "gray",
+      size: 4
     },
     { // Venus
       mass: 4.867e18,
@@ -126,6 +129,7 @@ function Sim() {
       positionX: 720,
       positionY: 0,
       color: "orange",
+      size: 5
     },
     { // Earth
       mass: 5.972e18,
@@ -134,6 +138,7 @@ function Sim() {
       positionX: 1000,
       positionY: 0,
       color: "blue",
+      size: 5
     },
     { // The moon
       mass: 7.347e16,
@@ -142,6 +147,7 @@ function Sim() {
       positionX: 1000,
       positionY: 3,
       color: "gray",
+      size: 3
     },
     { // Mars
       mass: 6.39e17,
@@ -150,6 +156,7 @@ function Sim() {
       positionX: 1520,
       positionY: 0,
       color: "red",
+      size: 5
     },
     { // Jupiter
       mass: 1.898e21,
@@ -158,6 +165,7 @@ function Sim() {
       positionX: -2000,
       positionY: 0,
       color: "orange",
+      size: 10
     },
     { // Saturn
       mass: 5.683e20,
@@ -166,6 +174,7 @@ function Sim() {
       positionX: 2300,
       positionY: 0,
       color: "yellow",
+      size: 9
     },
     // { // Uranus
     //   mass: 8.681e18,
@@ -190,6 +199,7 @@ function Sim() {
       position: { x: body.positionX, y: body.positionY },
       velocity: { x: body.velocityX, y: body.velocityY },
       mass: body.mass,
+      size: body.size,
     }));
     setSimulationBodies(initialSimBodies);
   }, [bodies]);
@@ -199,6 +209,7 @@ function Sim() {
       position: { x: body.positionX, y: body.positionY },
       velocity: { x: body.velocityX, y: body.velocityY },
       mass: body.mass,
+      size: body.size,
     }));
   }, [bodies]);
 
@@ -300,7 +311,7 @@ function Sim() {
           ? simulationBodiesRef.current[index].position
           : { x: body.positionX, y: body.positionY };
 
-        ctx.arc(pos.x, pos.y, 10, 0, Math.PI * 2);
+        ctx.arc(pos.x, pos.y, body.size * 4, 0, Math.PI * 2);
         ctx.fill();
 
         // Draw selection indicator
@@ -360,6 +371,7 @@ function Sim() {
       position: { x: body.positionX, y: body.positionY },
       velocity: { x: body.velocityX, y: body.velocityY },
       mass: body.mass,
+      size: body.size,
     }));
 
     const newPrediction = predictTrajectories(simulationBodies);
@@ -425,6 +437,7 @@ function Sim() {
         positionX: Math.random() * 600,
         positionY: Math.random() * 400,
         color: `hsl(${Math.random() * 360}, 70%, 50%)`,
+        size: 5
       },
     ]);
   };
@@ -449,13 +462,18 @@ function Sim() {
       const velocityX = orbitalSpeed * Math.sin(angle);
       const velocityY = -orbitalSpeed * Math.cos(angle);
 
+      const randomMass = 1e15 + Math.random() * 5e16;
+      const velocityJitterX = (Math.random() - 0.5) * 20;
+      const velocityJitterY = (Math.random() - 0.5) * 20;
+
       newBodies.push({
-        mass: 1e16,
-        velocityX,
-        velocityY,
+        mass: randomMass,
+        velocityX: velocityX + velocityJitterX,
+        velocityY: velocityY + velocityJitterY,
         positionX: radius * Math.cos(angle),
         positionY: radius * Math.sin(angle),
         color: "gray",
+        size: 1 + Math.random() * 3
       });
     }
     setBodies(newBodies);
@@ -489,14 +507,16 @@ function Sim() {
         </div>
       </div>
 
-      <Card className="p-4 space-y-4 w-full md:w-1/3">
+      <Card className="p-4 space-y-4 min-w-[500px] w-full md:w-1/3">
         <div className="flex justify-between items-center">
           <h2 className="text-xl font-bold">Bodies</h2>
-          <Button onClick={addBody} size="icon" variant="outline">
+          <Button onClick={addBody} variant="outline">
+            Add celestial body
             <PlusCircleIcon className="h-4 w-4" />
           </Button>
-          <Button onClick={spawnAsteroidBelt} size="icon" variant="outline">
-            Belt
+          <Button onClick={spawnAsteroidBelt} variant="outline">
+            Add asteroid belt
+            <PlusCircleIcon className="h-4 w-4" />
           </Button>
         </div>
         <div className="space-y-6">
@@ -568,6 +588,18 @@ function Sim() {
                       onChange={(e) => {
                         const newBodies = [...bodies];
                         newBodies[index].mass = Number(e.target.value);
+                        setBodies(newBodies);
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <Label>Size</Label>
+                    <Input
+                      type="number"
+                      value={body.size}
+                      onChange={(e) => {
+                        const newBodies = [...bodies];
+                        newBodies[index].size = Number(e.target.value);
                         setBodies(newBodies);
                       }}
                     />
