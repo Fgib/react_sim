@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { PauseIcon, PlayIcon, PlusCircleIcon, Trash2Icon } from "lucide-react";
 import { ScrollArea } from "./components/ui/scroll-area";
 
-// const G = 6.67430e-11 * 1e6;
 const G = 6.67430e-11 / 1e6;
 // const G = 6.67430e-11;
 

@@ -2,7 +2,7 @@
 
 An interactive gravity simulation built with React, TypeScript, and Canvas. Simulate planetary orbits and celestial mechanics in real-time.
 
-![Gravity Simulator Preview](orbit.svg)
+![Gravity Simulator Preview](public/image.png)
 
 ## ✨ Features
 
